@@ -11,7 +11,7 @@ def homeView(request):
 
     market = request.GET.get("market_selected")
     site_enb = request.GET.getlist("select_option")
-    dataframe = pd.read_excel(file)[:30]
+    dataframe = pd.read_excel(file)[:20]
     enbs = []
     for site in site_enb:
         enbs.append(int(site))
