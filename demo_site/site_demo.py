@@ -44,44 +44,6 @@ def write_dataframes_to_excel_sheet(
         except:
             pass
 
-
-def main():
-    mkt_list = ["MKT1", "MKT2", "MKT3", "MKT4"]
-
-    mkt_selection = str(st.sidebar.selectbox("Select Market", mkt_list))
-
-    st.sidebar.write(f"CIQ FILE FOR {mkt_selection}:")
-
-    # File selection will be based on the market for this example the file is a demo
-    file_selection = "demo_file.xlsx"
-    st.sidebar.write(f"{file_selection}")
-
-    ciq_xls = pd.ExcelFile(f"{file_selection}")
-    ciq_df = pd.read_excel(ciq_xls, sheet_name=0)
-
-    # There are two paths to follow, 1) select eNB, or select Cell ID, if you select eNB you can select several, if not you can only select one eNB but several Cell ID
-    select_option = st.sidebar.selectbox("Select Option", ["eNB", "Cell ID"])
-
-    if "eNB" == select_option:
-        sid_list = list(ciq_df["eNB ID"].unique().tolist())
-        sid_select = st.sidebar.multiselect("Site eNodeB", sid_list)
-        st.dataframe(ciq_df.loc[ciq_df["eNB ID"].isin(sid_select)].astype(str))
-
-    elif "Cell ID" == select_option:
-        sid_list = list(ciq_df["eNB ID"].unique().tolist())
-        sid_select = st.sidebar.selectbox("Site eNodeB", sid_list)
-        cell_list = (
-            ciq_df.loc[ciq_df["eNB ID"] == sid_select, "Cell ID"].unique().tolist()
-        )
-        cell_id_select = st.sidebar.multiselect("Cell ID", cell_list)
-        st.dataframe(
-            ciq_df.loc[
-                (ciq_df["eNB ID"] == sid_select)
-                & (ciq_df["Cell ID"].isin(cell_id_select))
-            ].astype(str)
-        )
-        sid_select = [sid_select]
-
     st.sidebar.write("Select File to be generated:")
     # This are the three files that can be created, you can chose all three but at least have one selected.
     option_pnp = st.sidebar.checkbox("pnp", value=True)
