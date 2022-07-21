@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block title %}{% endblock %} {% block content %}
+{% extends "base.html" %} 
+{% load static %}
+{% block title %}{% endblock %} {% block content %}
 <style>
   body {
     margin: 0;
@@ -49,15 +51,23 @@
     height: min-content;
     white-space: nowrap;
   }
-  #download{
+
+   #generate{
     text-decoration: none;
     color:rgb(245, 239, 239);
+    background-color: rgb(10, 165, 157);
   }
+    #download{
+    text-decoration: none;
+    color:rgb(245, 243, 243);
+    background-color: rgb(15, 129, 129);
+    }
 </style>
 
 <!-- Sidebar Starts -->
 <div class="sidebar">
   <h4 disabled>Information Selection</h4>
+  {{zip_file}}
   <form action="{% url 'home' %}" method="GET">
     {% csrf_token %}
     <!-- Select Markets -->
@@ -106,7 +116,11 @@
       </option>
       {% endfor %}
     </select>
+      <button type="submit" class="btn btn-primary mt-4">Load Data</button> 
+  </form>
     <br />
+    <form action="{% url 'home' %}" method="GET">
+    {% csrf_token %}
     <label><span class="text-info">Select files to be generated</span></label>
     <div class="form-check">
       <input
@@ -141,7 +155,12 @@
       />
       <label class="form-check-label" for="flexCheckChecked"> cell </label>
     </div>
-  <button type="submit" class="btn btn-success mt-4">Load Data & Generate PNP</button> 
+   
+    <button type="button" id="generate" name="generate" value="1" class="btn mt-4" onclick="showDownload()">
+    <a href="#" id="generate"  >
+      Generate PNP</a
+    >
+  </button>
  </form>
 </div>
 
@@ -160,14 +179,12 @@
 
   <div style="overflow-x: auto">{{data | safe}}</div>
 
-  <br />
-  {% if zip_file %}
-  <button type="button" class="btn btn-info mt-4">
-    <a href="{{zip_file.url}}" target="_blank" id="download">
+  <br>
+  <button type="button" id="download" class="btn mt-4 mb-4" style="display:none;">
+    <a href="{% url 'file' %}" target="_blank" id="download">
       Download PNP Files</a
     >
   </button>
-  {% endif %}
 </div>
 <!-- content ends -->
 
@@ -189,6 +206,12 @@
     } else if (option_sel.value == 1) {
       site_node.removeAttribute("multiple");
     }
+  }
+
+  function showDownload(){
+    const download = document.getElementById("download");
+    download.style.display = "block";
+    window.scrollTo(0,100);
   }
 </script>
 <!-- Scripts Ends-->

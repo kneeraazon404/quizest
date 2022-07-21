@@ -1,25 +1,27 @@
 import zipfile
+import csv
 import pandas as pd
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
-import zipfile
-
+from datetime import date
 
 file = "assets/example.xlsx"
+zip_file = "assets/pnpfiles.zip"
+
+# Zip Creation Function
 
 
 def compress(file_names):
     compression = zipfile.ZIP_DEFLATED
-
     # create the zip file first parameter path/name, second mode
-    zf = zipfile.ZipFile("assets/pnpFiles.zip", mode="w")
+    zf = zipfile.ZipFile("assets/pnpfiles.zip", mode="w")
     try:
         for file_name in file_names:
             # Add file to the zip file
             # first parameter file to zip, second filename in zip
             zf.write(file_name, file_name, compress_type=compression)
-
     except FileNotFoundError:
         print("An error occurred")
     finally:
@@ -34,7 +36,10 @@ def homeView(request):
     option_pnp = request.GET.get("pnp")
     option_enb = request.GET.get("enb")
     option_cell = request.GET.get("cell")
-    dataframe = pd.read_excel(file)[:20]
+    generate = request.GET.get("generate")
+    print(option_pnp, option_enb, option_cell)
+
+    dataframe = pd.read_excel(file)
     enbs = []
     for site in sid:
         enbs.append(int(site))
@@ -46,12 +51,38 @@ def homeView(request):
     df_e_unique = df["eNB ID"].unique()
     df_market = df[df["Market"] == market]
     df_enb = df_market.loc[df_market["eNB ID"].isin(enb_list)]
-    result_file = "assets/result.xlsx"
-    result = df_enb.to_excel(result_file)
-    file_names = [
-        result_file,
-    ]
+
+    # User logs Section
+    user = request.user
+    today = date.today()
+    time_of_act = today.strftime("%d/%m/%Y")
+    headers = ["User", "Market", "eNB ID", "Cell ID", "Time"]
+    with open("assets/logs.csv", "a") as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+        writer.writerow([user, market, sid, time_of_act])
+        f.close()
+
+    # Files Create Section
+    result_file1 = r"assets/result1.csv"
+    result_file2 = r"assets/result2.csv"
+    result_file3 = r"assets/result3.xlsx"
+    file_names = []
+    if option_pnp is not None:
+        df_enb.to_csv(result_file1, index=False)
+        file_names.append(result_file1)
+    if option_enb is not None:
+        df_enb.to_csv(result_file2, index=False)
+        file_names.append(result_file2)
+    if option_cell is not None:
+        df_enb.to_excel(result_file3)
+        file_names.append(result_file3)
+
+    # Call Zip Compress Function
+
     zip_file = compress(file_names)
+
+    # Create HTML table from dataframe with selected filters
     data = df_enb.to_html(
         index=False,
         classes=[
@@ -67,6 +98,8 @@ def homeView(request):
             "table-responsive-xxl",
         ],
     )
+
+    # Passing context to the template
     context = {
         "data": data,
         "markets": df_m_uniqe,
@@ -87,6 +120,7 @@ def loginView(request):
 
         if user is not None:
             auth.login(request, user)
+
             messages.success(request, "You are now logged in")
             return redirect("home")
         else:
@@ -94,3 +128,11 @@ def loginView(request):
             return redirect("login")
     else:
         return render(request, "login.html")
+
+
+# File Download view with file response
+def fileView(request):
+    response = HttpResponse(
+        open("assets/pnpfiles.zip", "rb"), content_type="application/zip"
+    )
+    return response
