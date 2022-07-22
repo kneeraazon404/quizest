@@ -1,68 +1,6 @@
 {% extends "base.html" %} 
 {% load static %}
 {% block title %}{% endblock %} {% block content %}
-<style>
-  body {
-    margin: 0;
-    font-family: "Lato", sans-serif;
-  }
-  .sidebar {
-    background-color: #3f3c3c;
-    color: white;
-    margin: auto;
-    padding: 10px;
-    width: 250px;
-    position: fixed;
-    height: 100vh;
-    overflow: auto;
-  }
-
-  div.content {
-    background-color: rgb(0, 0, 0);
-    color: white;
-    margin-left: 250px;
-    padding-top: 30px;
-    padding-left: 25px;
-    height: 100vh;
-  }
-  table {
-    border: 3px solid rgb(209, 195, 195);
-    border-collapse: collapse;
-    width: 100%;
-    white-space: nowrap;
-  }
-
-  table,
-  th {
-    background-color: #020202ad;
-    color: rgb(255, 255, 255);
-    font-size: 12px;
-    width: auto;
-    height: min-content;
-    white-space: nowrap;
-  }
-
-  table,
-  tr {
-    background-color: #363232ad;
-    color: rgb(255, 255, 255);
-    font-size: 12px;
-    width: auto;
-    height: min-content;
-    white-space: nowrap;
-  }
-
-   #generate{
-    text-decoration: none;
-    color:rgb(245, 239, 239);
-    background-color: rgb(10, 165, 157);
-  }
-    #download{
-    text-decoration: none;
-    color:rgb(245, 243, 243);
-    background-color: rgb(15, 129, 129);
-    }
-</style>
 
 <!-- Sidebar Starts -->
 <div class="sidebar">
@@ -92,12 +30,13 @@
     <br />
     <select
       class="form-select"
-      name=""
+      name="selected_option"
       id="select_option"
       onchange="selectOption()"
+      onchange="showCell()"
     >
-      <option value="1" name="opt4" value="cell" selected>Cell</option>
-      <option value="2" name="opt3" value="enb">eNB</option>
+      <option  value="Cell" selected>Cell</option>
+      <option  value="eNB" >eNB</option>
     </select>
     <br />
 
@@ -106,7 +45,7 @@
     <label for="flexCheckChecked"> Site eNodeB</label>
     <select
       class="form-select"
-      name="select_option"
+      name="site_nodes"
       aria-label=""
       id="site_node"
     >
@@ -116,11 +55,24 @@
       </option>
       {% endfor %}
     </select>
+    <br/>
+    <div id="cell_id" >
+    <label>Cell</label>
+     <select
+      class="form-select"
+      name="cell_option"
+      aria-label=""
+      id="cell_option"
+      multiple
+    >
+      {% for cell in cell_ids %}
+      <option class="text-primary" name="cell_option" value="{{ cell }}">
+        {{ cell }}
+      </option>
+      {% endfor %}
+      </select>
+      </div>
       <button type="submit" class="btn btn-primary mt-4">Load Data</button> 
-  </form>
-    <br />
-    <form action="{% url 'home' %}" method="GET">
-    {% csrf_token %}
     <label><span class="text-info">Select files to be generated</span></label>
     <div class="form-check">
       <input
@@ -156,11 +108,15 @@
       <label class="form-check-label" for="flexCheckChecked"> cell </label>
     </div>
    
-    <button type="button" id="generate" name="generate" value="1" class="btn mt-4" onclick="showDownload()">
-    <a href="#" id="generate"  >
-      Generate PNP</a
-    >
-  </button>
+      <button type="button" id="generate" name="generate" value="1" class="btn mt-4" onclick="showDownload()">
+      <a href="#" id="generate"  >
+        Generate PNP</a
+      >
+      </button>
+      <button type="button" id="download" class="btn mt-4 mb-4" style="display:none;">
+      <a href="{% url 'file' %}" target="_blank" id="download">
+        Download PNP Files</a>
+      </button>
  </form>
 </div>
 
@@ -169,7 +125,7 @@
 <div class="content">
   <h2>GROW SITE WEB APP</h2>
   <p>
-    This is an web app that performs the cell grow files from your ciq file.
+    This is an app that performs the cell grow files from your ciq file.
   </p>
   <ul>
     <li>Select Market</li>
@@ -177,42 +133,7 @@
     <li>Run the App</li>
   </ul>
 
-  <div style="overflow-x: auto">{{data | safe}}</div>
-
-  <br>
-  <button type="button" id="download" class="btn mt-4 mb-4" style="display:none;">
-    <a href="{% url 'file' %}" target="_blank" id="download">
-      Download PNP Files</a
-    >
-  </button>
+  <div style="overflow-x:scroll;">{{data | safe}}</div>
 </div>
 <!-- content ends -->
-
-<!-- Scripts Starts -->
-<script>
-  function selectMarket() {
-    const market = document.getElementById("market_selected");
-    const market_selected = document.getElementById("selected_market");
-    const ExcelFileName = document.getElementById("ExcelFileName");
-    market_selected.innerHTML = "CIQ FILE FOR  " + market.value;
-    ExcelFileName.innerHTML = "example.xlsx";
-  }
-  function selectOption() {
-    const option_sel = document.getElementById("select_option");
-    const site_node = document.getElementById("site_node");
-    console.log(option_sel.value);
-    if (option_sel.value == 2) {
-      site_node.setAttribute("multiple", "multiple");
-    } else if (option_sel.value == 1) {
-      site_node.removeAttribute("multiple");
-    }
-  }
-
-  function showDownload(){
-    const download = document.getElementById("download");
-    download.style.display = "block";
-    window.scrollTo(0,100);
-  }
-</script>
-<!-- Scripts Ends-->
 {% endblock %}
