@@ -5,11 +5,10 @@
 <!-- Sidebar Starts -->
 <div class="sidebar">
   <h4 disabled>Information Selection</h4>
-  {{zip_file}}
   <form action="{% url 'home' %}" method="GET">
     {% csrf_token %}
     <!-- Select Markets -->
-    <label class="" mt-3>Select Market:</label>
+    <label class="mt-3">Select Market:</label>
     <br />
     <select
       class="form-select"
@@ -107,7 +106,7 @@
       />
       <label class="form-check-label" for="flexCheckChecked"> cell </label>
     </div>
-   
+
       <button type="button" id="generate" name="generate" value="1" class="btn mt-4" onclick="showDownload()">
       <a href="#" id="generate"  >
         Generate PNP</a

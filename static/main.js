@@ -10,10 +10,10 @@ function selectOption() {
   const option_sel = document.getElementById("select_option");
   const site_node = document.getElementById("site_node");
   console.log(option_sel.value);
-  if (option_sel.value == 2)
+  if (option_sel.value == "eNB")
   {
     site_node.setAttribute("multiple", "multiple");
-  } else if (option_sel.value == 1)
+  } else if (option_sel.value == "Cell")
   {
     site_node.removeAttribute("multiple");
   }

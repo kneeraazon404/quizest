@@ -1,11 +1,26 @@
-import zipfile
 import csv
+import os
+import shutil
+import zipfile
+from datetime import date
+
 import pandas as pd
-from django.contrib import auth, messages
+from django.contrib import auth , messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from datetime import date
+from django.shortcuts import redirect , render
+
+def delete_files():
+    folder = 'assets/results/'
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 file = "assets/example.xlsx"
 zip_file = "assets/pnpfiles.zip"
@@ -37,10 +52,7 @@ def homeView(request):
     market = request.GET.get("market_selected")
     select_option = request.GET.get("selected_option")
     sid = request.GET.getlist("site_nodes")
-    cell = request.GET.getlist("cell_option")
-    sid = request.GET.getlist("site_nodes")
     cells = request.GET.getlist("cell_option")
-    dataframe = pd.read_excel(file)
     enbs = []
     for site in sid:
         enbs.append(int(site))
@@ -51,10 +63,11 @@ def homeView(request):
     enb_list = list(enblist)
     celllist = set(cell_ids)
     cell_list = list(celllist)
+    dataframe = pd.read_excel(file)
     df = pd.DataFrame(dataframe)
-    cell_ids = df.iloc[:, 8]
     df_m_uniqe = df["Market"].unique()
     df_e_unique = df["eNB ID"].unique()
+    df_cell_unique = df["Cell ID"].unique()
     df = df[df["Market"] == market]
     df = df.loc[df["eNB ID"].isin(enb_list)]
     if cells:
@@ -66,20 +79,20 @@ def homeView(request):
     user = request.user
     today = date.today()
     time_of_act = today.strftime("%d/%m/%Y")
-    headers = ["User", "Market", "Select Option", "eNB ID", "Cell ID", "Time"]
+    # headers = ["User", "Market", "Select Option", "eNB ID", "Cell ID", "Time"]
     with open("assets/logs.csv", "a") as f:
         writer = csv.writer(f)
         # writer.writerow(headers)
-        writer.writerow([user, market, select_option, sid, cell, time_of_act])
+        writer.writerow([user, market, select_option, enb_list, cell_list, time_of_act])
         f.close()
 
     # Files Create Section
     option_pnp = request.GET.get("pnp")
     option_enb = request.GET.get("enb")
     option_cell = request.GET.get("cell")
-    result_file1 = r"assets/result1.csv"
-    result_file2 = r"assets/result2.csv"
-    result_file3 = r"assets/result3.xlsx"
+    result_file1 = r"assets/results/result1.csv"
+    result_file2 = r"assets/results/result2.csv"
+    result_file3 = r"assets/results/result3.xlsx"
     file_names = []
     if option_pnp is not None:
         df.to_csv(result_file1, index=False)
@@ -111,13 +124,12 @@ def homeView(request):
             "table-responsive-xxl",
         ],
     )
-
     # Passing context to the template
     context = {
         "data": data,
         "markets": df_m_uniqe,
         "enode_bs": df_e_unique,
-        "cell_ids": cell_ids,
+        "cell_ids": df_cell_unique,
     }
     return render(request, "home.html", context)
 
@@ -153,4 +165,5 @@ def fileView(request):
     response = HttpResponse(
         open("assets/pnpfiles.zip", "rb"), content_type="application/zip"
     )
+    delete_files()
     return response
