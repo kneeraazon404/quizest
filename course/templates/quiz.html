@@ -1,0 +1,780 @@
+{% extends 'base/layout.html' %}
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+<style>
+    * {
+        font-family: 'Open Sans', sans-serif;
+    }
+    /* The container */
+    .checkmark-box {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        /* font-size: 18px; */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .checkmark-box input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #fff;
+        border: 1px solid;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .checkmark-box:hover input~.checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .checkmark-box input:checked~.checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .checkmark-box input:checked~.checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .checkmark-box .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 7px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    .form-switch {
+        line-height: 28px;
+        font-size: 16px;
+    }
+    .form-switch input{
+        width: 56px !important;
+        height: 23px !important;
+        margin-right: 5px;
+    }
+
+
+    /* The container */
+    .radio-box {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default radio button */
+    .radio-box input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom radio button */
+    .radiomark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #fff;
+        border-radius: 50%;
+        border: 1px solid #2196F3;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .radio-box:hover input~.radiomark {
+        background-color: #ccc;
+    }
+
+    /* When the radio button is checked, add a blue background */
+    .radio-box input:checked~.radiomark {
+        background-color: #fff;
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .radiomark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the indicator (dot/circle) when checked */
+    .radio-box input:checked~.radiomark:after {
+        display: block;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .radio-box .radiomark:after {
+        top: 4px;
+        left: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #2196F3;
+    }
+    /* Accordian */
+    .accordion-item{
+        border: 0;
+    }
+    .accordian-buttn{
+        text-decoration: none;
+    }
+    .fa-plus, .fa-minus {
+        cursor: pointer;
+        color: #d3cfc8;
+    }
+    .accordion-item .fa-solid.fa-plus{
+        display: none;
+    }
+    .accordion-item .collapsed .fa-solid.fa-plus{
+        display: inline-block;
+    }
+    .accordion-item .fa-solid.fa-minus{
+        display:  inline-block;
+    }
+    .accordion-item .collapsed .fa-solid.fa-minus{
+        display: none ;
+    }
+    .rounded-5{
+        height: 22px;
+        line-height: 21px;
+        padding: 0 7px;
+        border-radius: 11px;
+        text-align: center;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        border: 1px solid #b2b2b2 !important;; 
+        color: #2196f3 !important;
+    }
+    .form-check-label:not(.h6){
+        color: #65656a !important;
+        font-size: 15px !important;
+    }
+    .form-switch label{
+        margin-left:20px;
+    }
+    .pop-over{
+        cursor: pointer;
+    }
+
+</style>
+{% endblock %}
+{% block body %}
+<div class="container mt-4">
+    <div>
+        <h6 style="display: inline-block;">Test Mode</h6>
+        <a  tabindex="0" data-bs-toggle="popover" data-container="body" style="text-decoration: none;"   data-bs-trigger="focus"
+        data-bs-content="
+        <strong> Tutor: </strong> Shows the correct answer and explanation after you answer each question
+        <br>
+        <hr>
+        <strong> Timed: </strong> Sets a time limit on the test" 
+        class="pop-over testpopover "> <i class="fa-solid fa-circle-info"></i></a>
+    </div>
+    <hr />
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="mb-4 d-flex justify-content-start">
+            <div class="form-check form-switch mx-2">
+                <input name="tutor" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked/>
+                <label class="" for="flexSwitchCheckDefault">Tutor</label>
+            </div>
+            <div class="form-check form-switch mx-2">
+                <input name="timed" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+                <label class="" for="flexSwitchCheckChecked">Timed</label>
+            </div>
+        </div>
+        <div>
+            <h6 style="display: inline-block;">Question Mode</h6>
+            <a tabindex="0" data-bs-toggle="popover" data-container="body" style="text-decoration: none;"   data-bs-trigger="focus"
+        data-bs-content="
+        <strong> Unused: </strong> Selects questions from a set of new/unseen questions
+        <br><hr>
+        <strong> Incorrect: </strong> Generates test using questions that were answered incorrectly
+        <br><hr>
+        <strong> Correct: </strong> Generates test using questions that were answered correctly
+        <br><hr>
+        <strong> Marked: </strong> Selects questions that were previously marked/flagged for review
+        <br><hr>
+        <strong> All: </strong> Randomly selects questions from a set of all available questions" 
+        class="pop-over questionpopover"><i class=" fa-solid fa-circle-info"></i></a>
+        </div>
+        <hr />
+        <!-- Question Mode-->
+        <div class="d-flex flex-wrap">
+            <div class="form-check">
+                <label class="form-check-label radio-box" for="exampleRadios1">
+                    <input {% if unused < 1 %} disabled {% endif %} class="form-check-input" type="radio"
+                        name="exampleRadios" id="exampleRadios1" value="unused" />
+                    Unused <span class="available-question border rounded-5 px-3 mx-2 text-primary">{{unused}}</span>
+                    <span class="radiomark"></span>
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label radio-box" for="exampleRadios2">
+                    <input {% if marked < 1 %} disabled {% endif %} class="form-check-input" type="radio"
+                        name="exampleRadios" id="exampleRadios2" value="marked" />
+                    Marked <span class="available-question  border rounded-5 px-3 mx-2 text-primary">{{marked}}</span>
+                    <span class="radiomark"></span>
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label radio-box" for="exampleRadios3">
+                    <input {% if incorrect < 1 %} disabled {% endif %} class="form-check-input" type="radio"
+                        name="exampleRadios" id="exampleRadios3" value="incorrect" />
+                    Incorrect <span class="text-danger  border rounded-5 px-3 mx-2">{{ incorrect }}</span>
+                    <span class="radiomark"></span>
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label radio-box" for="exampleRadios4">
+                    <input {% if correct < 1 %} disabled {% endif %} class="form-check-input" type="radio"
+                        name="exampleRadios" id="exampleRadios4" value="correct" />
+                    Correct <span class="text-success  border rounded-5 px-3 mx-2">{{ correct }}</span>
+                    <span class="radiomark"></span>
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label radio-box" for="exampleRadios5">
+                    <input {% if total < 1 %} disabled {% endif %} checked class="form-check-input" type="radio"
+                        name="exampleRadios" id="exampleRadios5" value="all" />
+                    All <span class="border rounded-5 px-3 mx-2 text-primary">{{ total }}</span>
+                    <span class="radiomark"></span>
+                </label>
+            </div>
+            <!-- <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios6" value="option1" />
+                <label class="form-check-label" for="exampleRadios6"> Custom </label>
+            </div> -->
+        </div>
+        <!-- Question Mode End -->
+        <!-- Subject Top Selection -->
+        <div class="form-check mt-5 ps-0">
+            <label class="form-check-label h6 checkmark-box" for="subject-selection">Subjects
+                <input class="form-check-input" type="checkbox" value="" id="subject-selection" />
+                <span class="checkmark"></span>
+            </label>
+        </div>
+        <!-- Subject Top Selection End -->
+        <hr />
+        <!-- Subject Selection -->
+
+        <div class="px-3">
+            <div class="row">
+                {% for subject,count in subjects %}
+                <div class="form-check col-12 col-md-6" id="subject{{subject.id}}">
+                    <label class="form-check-label checkmark-box" for="subjectcheck{{subject.id}}">
+                        {{ subject }}<span class="count-subject border rounded-5 px-3 mx-3 text-primary">{{count}}</span>
+                        <input {% if count < 1 %} disabled {% endif %} class="subject-check form-check-input "
+                            type="checkbox" value="" id="subjectcheck{{subject.id}}" onchange="getSystem()" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Subject selection end-->
+
+        <div class="form-check mt-5 ps-0">
+            <label class="form-check-label h6 checkmark-box" for="system-selection">Systems
+                <input class="form-check-input" type="checkbox" value="" id="system-selection" />
+                <span class="checkmark"></span>
+            </label>
+        </div>
+        <!-- Subject Top Selection End -->
+
+        <hr />
+        <!-- Subject Selection -->
+        <div class="px-3">
+            <div class="accordion d-flex flex-column" id="accordionExample"></div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    {% for system,count in systems_one %}
+                    <div class="accordion-item form-check col-12" id="system{{system.id}}">
+                        <div class="d-flex justify-content-between" id="heading{{system.id}}">
+                            <label class="form-check-label checkmark-box" for="systemcheck{{system.id}}">{{system}}
+                                <span class="count-system border rounded-5 px-3 mx-3 text-primary">0</span>
+                                <input disabled class="system-check form-check-input" type="checkbox" value=""
+                                    id="systemcheck{{system.id}}" onchange="getCount()" />
+                                <span class="checkmark"></span>
+                            </label>
+                            <a class="accordion-buttn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{system.id}}"
+                            aria-expanded="true" aria-controls="collapse{{system.id}}">
+                                <i class="fa-solid fa-plus"></i>
+                                <i class="fa-solid fa-minus"></i>
+                            </a>
+                        </div>
+                        <div id="collapse{{system.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{system.id}}"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {% for topic in topics %}
+                                {% if topic.system == system %}
+                                <div class="form-check" id="topic{{topic.id}}">
+                                    <label class="form-check-label checkmark-box" for="topiccheck{{topic.id}}">{{topic}}
+                                        <span class="count-topic border rounded-5 px-3 mx-3 text-primary">0</span>
+                                        <input disabled class="topic-check form-check-input" type="checkbox" value=""
+                                            id="topiccheck{{topic.id}}" onchange="topicCount()" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-12 col-md-6">
+                    {% for system,count in systems_two %}
+                    <div class="accordion-item form-check col-12" id="system{{system.id}}">
+                        <div class="d-flex justify-content-between" id="heading{{system.id}}">
+                            <label class="form-check-label checkmark-box" for="systemcheck{{system.id}}">{{system}}
+                                <span class="count-system border rounded-5 px-3 mx-3 text-primary">0</span>
+                                <input disabled class="system-check form-check-input" type="checkbox" value=""
+                                    id="systemcheck{{system.id}}" onchange="getCount()" />
+                                <span class="checkmark"></span>
+                            </label>
+                            <a class="accordion-buttn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{system.id}}"
+                            aria-expanded="true" aria-controls="collapse{{system.id}}">
+                                <i class="fa-solid fa-plus"></i>
+                                <i class="fa-solid fa-minus"></i>
+                            </a>
+                        </div>
+                        <div id="collapse{{system.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{system.id}}"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {% for topic in topics %}
+                                {% if topic.system == system %}
+                                <div class="form-check" id="topic{{topic.id}}">
+                                    <label class="form-check-label checkmark-box" for="topiccheck{{topic.id}}">{{topic}}
+                                        <span class="count-topic border rounded-5 px-3 mx-3 text-primary">0</span>
+                                        <input disabled class="topic-check form-check-input" type="checkbox" value=""
+                                            id="topiccheck{{topic.id}}" onchange="topicCount()" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="subjectall" id="subjectall">
+        <input type="hidden" name="systemall" id="systemall">
+        <input type="hidden" name="topicall" id="topicall">
+        <hr />
+        <div class="w-100 mb-3">
+            <input id="number_of_question" name="number_of_question" class="total_question rounded-1 px-2" type="number" value="0" min="1" max="1" />
+            &nbsp;&nbsp; Max Number of Questions <span id="total_question" class="rounded-5"> 0 </span>
+        </div>
+        <hr />
+        <div class="w-100 mb-3">
+            <button id="questionSubmit" class="btn py-2 px-4 btn-primary hover-translate-y-n3 hover-shadow-lg mb-3 text-center">GENRERATE TEST</button>
+        </div>
+    </form>
+    <!-- Suspend Button Modal -->
+    <div class="modal fade " id="system-button-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="suspend-button-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="suspend-button-modalLabel">!!!Warning!!!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Select At least one system to generate test.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+// const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+// const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+const popover = new bootstrap.Popover('.testpopover', {
+    html: true,
+    placement: 'right',
+    container:"body",
+})
+const popover1 = new bootstrap.Popover('.questionpopover', {
+    html: true,
+    placement: 'right',
+    container:"body",
+})
+
+    var intervalId = window.setInterval(function(){
+        questionSubmitCheck()
+    }, 100)
+    function questionSubmitCheck(){
+        var question = $('#number_of_question').val();
+        if (question < 1){
+            $('#questionSubmit').removeAttr('type')
+            $('#questionSubmit').attr('onclick', 'systemTest()');
+        }else{
+            $('#questionSubmit').removeAttr('onclick');
+            $('#questionSubmit').attr('type', 'submit');
+        }
+    }
+    function systemTest(){
+        var question = $('#number_of_question').val();
+        if (question < 1) {
+            $('#system-button-modal').modal('show')
+        }
+    }
+    var selected_subject = [];
+    var selected_system = [];
+    // click the all subject checkbox to select all subjects
+    $('#subject-selection').on('change', function () {
+        console.log('subject-selection');
+        selected_subject = [];
+        var subject_check = $('.subject-check');
+        if ($(this).is(':checked')) {
+            for (var i = 0; i < subject_check.length; i++) {
+                var ParentId = $(subject_check[i]).parent().parent().attr('id');
+                console.log(ParentId);
+                if ($(subject_check[i]).is(':disabled')) {
+                }
+                else {
+                    subject_check[i].checked = true;
+                    selected_subject.push(ParentId);
+                }
+            }
+        } else {
+            selected_subject = [];
+            for (var i = 0; i < subject_check.length; i++) {
+                subject_check[i].checked = false;
+            }
+        }
+        // console.log('Here',selected_subject);
+        getSystem();
+    });
+    // click the all system checkbox to select all systems
+    $('#system-selection').on('change', function () {
+        selected_system = [];
+        var system_check = $('.system-check');
+        var topicInputList = document.querySelectorAll('.topic-check');
+        if ($(this).is(':checked')) {
+            for (var i = 0; i < system_check.length; i++) {
+                var ParentId = $(system_check[i]).parent().parent().parent().attr('id');
+                console.log(ParentId);
+                if ($(system_check[i]).is(':disabled')) {
+                }
+                else {
+                    system_check[i].checked = true;
+                    selected_system.push(ParentId);
+                }
+            }
+            for (var j = 0; j < topicInputList.length; j++) {
+                    if ($(topicInputList[j]).is(':disabled')) {
+                    }
+                    else {
+                        topicInputList[j].checked = true;
+                    }
+                }
+        } else {
+            // console.log("Unselect all");
+            selected_system = [];
+            for (var i = 0; i < system_check.length; i++) {
+                system_check[i].checked = false;
+            }
+            for (var j = 0; j < topicInputList.length; j++) {
+                topicInputList[j].checked = false;
+            }
+        }
+        // console.log('Here',selected_system);
+        getCount();
+    });
+    // Unchecked the subject checkbox while unchecking the individual subject checkbox
+    var subject_check = $('.subject-check');
+    for (var i = 0; i < subject_check.length; i++) {
+        subject_check[i].addEventListener('click', function () {
+            var subject_selection = $('#subject-selection');
+            var ParentId = $(this).parent().parent().attr('id');
+            // console.log(ParentId);
+            if ($(this).is(':checked')) {
+                // console.log('checked');
+                selected_subject.push(ParentId);
+            } else {
+                subject_selection[0].checked = false;
+                selected_subject.splice(selected_subject.indexOf(ParentId), 1);
+            }
+            
+            // console.log(selected_subject);
+        });
+    }
+
+    var topic_check = $('.topic-check');
+    for (var i = 0; i < topic_check.length; i++) {
+        topic_check[i].addEventListener('click', function () {
+            var ParentId = $(this).parent().parent().parent().parent().parent().attr('id');
+            console.log(ParentId);
+            parentID = '#' + ParentId;
+            var ParentElement = document.getElementById(ParentId);
+            var systemCheck = ParentElement.querySelector('.system-check');
+            var topicList = ParentElement.querySelectorAll('.topic-check');
+            for (var j = 0; j < topicList.length; j++) {
+                if (topicList[j].checked || topicList[j].disabled) {
+                }
+                else {
+                    systemCheck.checked = false;
+                    break;
+                }
+                systemCheck.checked = true;
+            }
+            getCount();
+        });
+    }
+
+    // Unchecked the system checkbox while unchecking the individual system checkbox
+    var system_check = $('.system-check');
+    for (var i = 0; i < system_check.length; i++) {
+        system_check[i].addEventListener('click', function () {
+            var system_selection = $('#system-selection');
+            var ParentId = $(this).parent().parent().parent().attr('id');
+            console.log(ParentId);
+            if ($(this).is(':checked')) {
+                // console.log('checked');
+                selected_system.push(ParentId);
+            } else {
+                system_selection[0].checked = false;
+                selected_system.splice(selected_system.indexOf(ParentId), 1);
+            }
+            targetParent = document.getElementById(ParentId);
+            topicInputList = targetParent.querySelectorAll('.topic-check');
+            console.log(topicInputList);
+            for (var j = 0; j < topicInputList.length; j++) {
+                if (this.checked) {
+                    if ($(topicInputList[j]).is(':disabled')) {
+                    }
+                    else {
+                        topicInputList[j].checked = true;
+                    }
+                } else {
+                    topicInputList[j].checked = false;
+                }
+            }
+            // console.log(targetParent);
+            // console.log(selected_system);
+            getCount();
+        });
+    }
+
+    function getSystem() {
+        console.log("Hello I came here");
+        var status = $('input[name="exampleRadios"]:checked').val()
+        // console.log('getSystem');
+        $('#subjectall').val(selected_subject);
+        var subject = $('#subjectall').val();
+        console.log("Subject", subject);
+        $.ajax({
+            type: 'GET',
+            Url: '/test/',
+            beforeSend: function (request) {
+                request.setRequestHeader("AjaxRequest", 'GetSystemData');
+            },
+            data: {
+                data: subject,
+                status: status,
+            },
+            success: function (data) {
+                console.log("Hello I am Success");
+                system = data.system;
+                console.log("System", system);
+                topics = data.topic;
+                count_sys = document.querySelectorAll('.count-system')
+                for (var i = 0; i < count_sys.length; i++) {
+                    count_sys[i].innerHTML = 0
+                    var parent = count_sys[i].parentNode.parentNode;
+                    var child = parent.querySelector('.system-check')
+                    $(child).attr('disabled', 'disabled');
+                    $(child).prop('checked', false);
+                }
+                for (sys in system) {
+                    var id = 'system'+ system[sys]['id'];
+                    var element = document.getElementById(id);
+                    var child = element.querySelector('.system-check')
+                    $(child).removeAttr('disabled');
+                    element.querySelector('.count-system').innerHTML = system[sys]['quantity'];
+                }
+                count_topic = document.querySelectorAll('.count-topic')
+                for (var i = 0; i < count_topic.length; i++) {
+                    count_topic[i].innerHTML = 0
+                    var parent = count_topic[i].parentNode.parentNode;
+                    var child = parent.querySelector('.topic-check')
+                    $(child).attr('disabled', 'disabled');
+                    $(child).prop('checked', false);
+                }
+                for (topic in topics) {
+                    var id = 'topic'+ topics[topic]['id'];
+                    console.log("Topic", id);
+                    var element = document.getElementById(id);
+                    console.log("Topic", element);
+                    var child = element.querySelector('.topic-check')
+                    $(child).removeAttr('disabled');
+                    element.querySelector('.count-topic').innerHTML = topics[topic]['quantity'];
+                }
+            },
+            error: function (error) {
+                // console.log(error);
+            }
+        });
+    }
+
+    function topicCount() {
+        var topic_list = [];
+        var topicCheck = document.querySelectorAll('.topic-check');
+        for (var i = 0; i < topicCheck.length; i++) {
+            if ($(topicCheck[i]).is(':checked')) {
+                var parent = topicCheck[i].parentNode.parentNode;
+                var topicName = parent.id
+                topic_list.push(topicName);
+                console.log("Topic Name", topicName);
+            }
+        }
+        console.log("Topic List", topic_list);
+        $('#topicall').val(topic_list);
+    }
+
+    function getCount() {
+        topicCount();
+        var status = $('input[name="exampleRadios"]:checked').val()
+
+        $('#systemall').val(selected_system);
+        var system = '';
+        var topic = $('#topicall').val();
+        $.ajax({
+            type: 'GET',
+            Url: '/test/',
+            beforeSend: function (request) {
+                request.setRequestHeader("AjaxRequest", 'GetCount');
+            },
+            data: {
+                system: system,
+                topic: topic,
+                status: status,
+            },
+            success: function (data) {
+
+                if (data.count > 200) {
+                    $('.total_question').attr('max', 200);
+                    $('.total_question').attr('value', 200);
+                }
+                else {
+                    $('.total_question').attr('max', data.count);
+                    $('.total_question').attr('value', data.count);
+                }
+                $('#total_question').html(data.count);
+            },
+            error: function (error) {
+                // console.log(error);
+            }
+        });
+    }
+
+    var radioinput = document.querySelectorAll('input[name="exampleRadios"]');
+    // console.log(radioinput);
+    for (var i = 0; i < radioinput.length; i++) {
+        radioinput[i].addEventListener('change', function () {
+            // console.log(this.value);
+            $.ajax({
+                type: 'GET',
+                Url: '/test/',
+                beforeSend: function (request) {
+                    request.setRequestHeader("AjaxRequest", 'GetSubjectData');
+                },
+                data: {
+                    data: this.value,
+                },
+                success: function (data) {
+                    subject = data.subject
+                    count_sub = document.querySelectorAll('.count-subject')
+                    for (var i = 0; i < count_sub.length; i++) {
+                        count_sub[i].innerHTML = 0
+                        var parent = count_sub[i].parentNode.parentNode;
+                        var child = parent.querySelector('.subject-check')
+                        $(child).attr('disabled', 'disabled');
+                        $(child).prop('checked', false);
+                    }
+                    for (sub in subject) {
+                        var id = 'subject'+ subject[sub]['id'];
+                        var element = document.getElementById(id);
+                        var child = element.querySelector('.subject-check')
+                        $(child).removeAttr('disabled');
+                        element.querySelector('.count-subject').innerHTML = subject[sub]['quantity'];
+                    }
+                    // Uncheck system selection and subject selection
+                    $('#system-selection').prop('checked', false);
+                    $('#subject-selection').prop('checked', false);
+                    count_sys = document.querySelectorAll('.count-system')
+                    for (var i = 0; i < count_sys.length; i++) {
+                        count_sys[i].innerHTML = 0
+                        var parent = count_sys[i].parentNode.parentNode;
+                        var child = parent.querySelector('.system-check')
+                        $(child).attr('disabled', 'disabled');
+                        $(child).prop('checked', false);
+                    }
+                    // Count 0 in all topic count
+                    count_topic = document.querySelectorAll('.count-topic')
+                    for (var i = 0; i < count_topic.length; i++) {
+                        count_topic[i].innerHTML = 0
+                        var parent = count_topic[i].parentNode.parentNode;
+                        var child = parent.querySelector('.topic-check')
+                        $(child).attr('disabled', 'disabled');
+                        $(child).prop('checked', false);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    }
+</script>
+
+{% endblock body %}

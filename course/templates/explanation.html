@@ -1,0 +1,89 @@
+<div class="" style="width: 100%;">
+    <div class="card-body">
+        <!-- <h5 class="card-title h3">Question Number {{current_page}}</h5> -->
+        {% if question.image %}
+        <div class="card align-content-center align-text-center my-2" style="max-width:400px">
+            <img class="card-img-top img-thumbnail" src="{{question.image.url}}" alt="Question image" />
+        </div>
+        {% endif %}
+        <p class="card-text">{{ question.questionText }}</p>
+    </div>
+    <ul class="answer-list list-group list-group-flush p-3">
+        {% for ans in question.answer_set.all %}
+        <div class="form-check py-2 col-12">
+            <input {% if ans.answer == submitted_answer %} checked {% endif %} disabled class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio{{ forloop.counter }}"
+                value="{{ ans.id }}">
+            <label class="form-check-label {% if ans.answer == correct_answer %} text-success {% else %} {% if ans.answer == submitted_answer %} text-danger {% endif %} {% endif %}" for="inlineRadio{{ forloop.counter }}">
+                {% if forloop.counter == 1 %} A) {% elif forloop.counter == 2 %} B) {% elif forloop.counter == 3 %} C) {% elif forloop.counter == 4 %} D) {% elif forloop.counter == 5 %} E) {% elif forloop.counter == 6 %} F) {% endif %}
+                {{ ans }} {% if ans.answer == correct_answer %} <i class="fa-solid fa-check text-success"></i> {% else %} {% if ans.answer == submitted_answer %} <i class="fa-solid fa-xmark text-danger"></i> {% endif %} {% endif %}
+                ({% if forloop.counter == 1 %} {{answerPercentageList.0}} {% elif forloop.counter == 2 %} {{answerPercentageList.1}} {% elif forloop.counter == 3 %} {{answerPercentageList.2}} {% elif forloop.counter == 4 %} {{answerPercentageList.3}} {% elif forloop.counter == 5 %} {{answerPercentageList.4}} {% elif forloop.counter == 6 %} {{answerPercentageList.5}} {% endif %}%)
+            </label>
+        </div>
+        {% endfor %}
+    </ul>
+    <div class="answer-status {% if given_answer == False %} wrong-answer{% else %} correct-answer {% endif %}">
+        <div class="status">
+            {% if given_answer == False %}
+                <span class="wrong">Incorrect</span>
+                <span class="text-p">Correct Answer</span>
+                <span class="correct-answer">{{ correct_answer }}</span>
+            {% else %}
+                <span class="correct">Correct</span>
+            {% endif %}
+        </div>
+        <div class="stat">
+            <i class="fa-solid fa-chart-column"></i>
+            <div>
+                <span class="correct-percent">{{correct_answered}}%</span>
+                <span class="text-p">Answered Correctely</span>
+            </div>
+        </div>
+        <div class="time-spent">
+            <i class="fa-regular fa-clock"></i>
+            <div>
+                <span>{{time_taken}} Sec</span>
+                <span class="text-p">Time Spent</span>
+            </div>
+        </div>
+        <div class="version">
+            <i class="fa-regular fa-calendar-days"></i>
+            <div>
+                <span>2022</span>
+                <span class="text-p">Version</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="explanation container-fluid">
+    <div class="">
+        <div class="card-body">
+            <h5 class="card-title">Explanation</h5>
+            {% if question.explaination_image %}
+                <div class="card align-content-center align-text-center" style="max-width:400px">
+                    <img class="card-img-top img-thumbnail" src="{{question.explaination_image.url}}" alt="Question image" />
+                </div>
+                {% endif %}
+            <p class="card-text">{{ question.explainationText }}</p>
+        </div>
+        <ul class="list-group list-group-flush p-3 pe-none">
+            {% if question.subject is not None %}
+            <div class="mb-2">
+                <span>{{ question.subject }}</span>
+                <span class="text-p">Subject</span>
+            </div>
+            {% endif %}
+            {% if question.system is not None %}
+            <div class="mb-2">
+                <span>{{ question.system }}</span>
+                <span class="text-p">System</span>
+            </div>
+            {% endif %}
+            {% if question.topic is not None %}
+            <div class="mb-2">
+                <span>{{ question.topic }}</span>
+                <span class="text-p">Topic</span>
+            </div>
+            {% endif %}
+        </ul>
+    </div>
+</div>

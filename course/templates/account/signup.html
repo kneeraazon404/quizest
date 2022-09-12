@@ -1,0 +1,144 @@
+{% extends "base/layout.html" %}
+{% load static %}
+{% block title %}Sign Up{% endblock %}
+{% block head_title %}Create New Account{% endblock %}
+{% block body %}
+
+{% load i18n %}
+
+
+{% block content %}
+
+<section>
+    <div class="container d-flex flex-column">
+        <div class="row align-items-center justify-content-center min-vh-100">
+            <div class="col-md-8 col-lg-5 py-6">
+                <div>
+                    <div class="mb-5 text-center">
+                        <h6 class="h3 mb-1">Create your account</h6>
+                        <p class="text-muted mb-0">Made with love for designers &amp; developers.</p>
+                    </div>
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+
+                    {% endfor %}
+                    {% endif %}
+                    <span class="clearfix"></span>
+                    <form method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <div class="form-group">
+                            <label class="form-control-label">Username</label>
+                            <div class="input-group input-group-merge">
+                                <div class="input-group-prepend" style="height: 100%;">
+                                    <span class="input-group-text" style="height: 50px;border-radius: 0.375rem 0 0 0.375rem;"><i class="fa-solid fa-user"></i></span>
+                                </div>
+                                {{ form.username }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Email address</label>
+                            <div class="input-group input-group-merge">
+                                <div class="input-group-prepend" style="height: 100%;">
+                                    <span class="input-group-text" style="height: 50px;border-radius: 0.375rem 0 0 0.375rem;"><i class="fa-solid fa-at"></i></span>
+                                </div>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                        {% if form.password1.errors %}
+                        {% for error in form.password1.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+
+                        {% endfor %}
+                        {% endif %}
+                        <div class="form-group mb-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <label class="form-control-label">Password</label>
+                                </div>
+
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <div class="input-group-prepend" style="height: 100%;">
+                                    <span class="input-group-text" style="height: 50px;border-radius: 0.375rem 0 0 0.375rem;"><i class="fa-solid fa-key"></i></span>
+                                </div>
+                                {{ form.password1 }}
+                            </div>
+                        </div>
+                        {% if form.password2.errors %}
+                        {% for error in form.password2.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+
+                        {% endfor %}
+                        {% endif %}
+                        <div class="form-group mb-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <label class="form-control-label">Confirm Password</label>
+                                </div>
+
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <div class="input-group-prepend" style="height: 100%;">
+                                    <span class="input-group-text" style="height: 50px;border-radius: 0.375rem 0 0 0.375rem;"><i class="fa-solid fa-key"></i></span>
+                                </div>
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="chec-terms">
+                                <label class="custom-control-label" for="chec-terms">I agree to the <a
+                                        href="#">terms and conditions</a></label>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-block btn-primary">Create my account</button>
+                        </div>
+                    </form>
+                    <!-- <div class="py-3 text-center">
+                        <span class="text-xs text-uppercase">or</span>
+                    </div> -->
+                    <!-- Alternative login -->
+                    <!-- <div class="row">
+                        <div class="col-sm-12">
+                            <a href="#" class="btn btn-block btn-neutral btn-icon">
+                                <span class="btn-inner--icon"><img
+                                        src="{% static 'assets/img/icons/brands/google.svg' %}"
+                                        alt="Image placeholder"></span>
+                                <span class="btn-inner--text">Google</span>
+                            </a>
+                        </div>
+                    </div> -->
+                    <!-- Links -->
+                    <div class="mt-4 text-center"><small>Already have an acocunt?</small>
+                        <a href="{% url 'account_login' %}" class="small font-weight-bold">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .form-control-add {
+        border-right-width: 1px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+</style>
+
+<script>
+    let inputs = document.querySelectorAll("input")
+    inputs.forEach((element) => {
+        element.classList.add("form-control")
+        element.style.borderRightWidth = "1px"
+        element.style.borderTopRightRadius = "5px"
+        element.style.borderBottomRightRadius = "5px"
+    })
+</script>
+
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,1056 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+    <style>
+        body {
+            /* font-family: 'Noto Serif', serif; */
+            font-family: 'Lato', sans-serif;
+        }
+
+        .nav .nav-item {
+            cursor: pointer;
+        }
+
+        .top-bar {
+            top: 0;
+        }
+
+        .card-text {
+            margin: 10px 0;
+        }
+
+        .card-text,
+        .form-check-label {
+            font-size: 15px;
+        }
+
+        .top-bar,
+        .bottom-bar {
+            position: fixed;
+            z-index: 999;
+            width: calc(100% - 110px);
+            background-color: #3852a4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 25px 0px 5px;
+        }
+
+        .top-bar {
+            position: unset;
+            width: 100%;
+        }
+
+        .question-nav-top li .fa-bars {
+            font-size: 32px;
+            color: white;
+        }
+
+        .question-nav-top li,
+        .question-nav-bottom li,
+        .question-nav-top a,
+        .question-nav-bottom a {
+            color: white;
+        }
+
+        .question-nav-top a:hover,
+        .question-nav-bottom a:hover {
+            text-decoration: none;
+            color: #ddd;
+        }
+
+        .question-number-side {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 110px;
+            height: 100vh;
+            overflow: auto;
+            background-color: #eee;
+        }
+
+        .question-nav-bottom {
+            position: fixed;
+            bottom: 0;
+        }
+
+        /* .question-nav-top li:not(:first-child),
+        .question-nav-bottom li:not(:first-child) {
+            margin-left: 7px;
+        } */
+
+        .question-nav-bottom li {
+            cursor: pointer;
+        }
+
+        .question-number {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-number li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px 6px 0;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #b5b5b5;
+        }
+
+        .question-number li .fa-solid.fa-circle {
+            font-size: 6px;
+            color: #5c5c5c;
+        }
+
+        .question-number li a {
+            text-decoration: none;
+            color: #3a3a3a
+        }
+
+        .question-number .list-group-item {
+            border-top: 0 !important;
+            border-left: 0 !important;
+            border-right: 0 !important;
+            border-bottom: 1px solid #3852a4 !important;
+            border-radius: 0;
+        }
+
+        /* .question-number li:nth-child(2n) {
+            background-color: #ccc;
+        } */
+
+        .question-number li:hover {
+            background-color: #ccc;
+        }
+
+        .fa-circle-xmark {
+            color: red;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        main {
+            position: relative;
+            left: 110px;
+            width: calc(100% - 110px);
+            min-height: calc(100vh - 53px);
+        }
+
+        .main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* margin: 58px auto; */
+            margin-bottom: 53px;
+        }
+
+        @media screen and (max-width:750px) {
+            main {
+                margin-bottom: 106px;
+            }
+        }
+
+        .wrong {
+            color: red;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .answer-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            flex-wrap: wrap;
+        }
+
+        .answer-status>div {
+            /* padding:15px 40px 15px 20px; */
+            /* border-right: 1px solid #ccc; */
+            height: 96px;
+            padding: 10px;
+        }
+
+        .answer-status.correct-answer .status {
+            border-left: 5px solid green;
+        }
+
+        .answer-status.wrong-answer .status {
+            border-left: 5px solid red;
+        }
+
+        .answer-status>div,
+        .answer-status>div>div,
+        .explanation .list-group>div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .answer-status span:not(.text-p) {
+            font-size: 14px !important;
+            color: #1a1a1a;
+        }
+
+        .text-p {
+            color: #6a6a6a;
+            font-size: 12px;
+        }
+
+        .answer-status i {
+            font-size: 2.25rem;
+        }
+
+        .answer-status .stat,
+        .answer-status .time-spent,
+        .answer-status .version {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav .nav-item {
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .nav .nav-item:hover {
+            background-color: #283294;
+        }
+
+        /* @media  (max-width: 880px) {
+            #prenex{
+                display: flex;
+                flex-direction: column;
+                align-items: end;
+            }
+        } */
+        #prenex a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        #prenex .nav-item {
+            padding: 0;
+        }
+
+        @media (max-width: 680px) {
+            #quetest {
+                display: none !important;
+            }
+        }
+
+        .explanation a {
+            background-color: #0067a9;
+            border-radius: 0;
+        }
+
+        .fa-solid,
+        .fas {
+            font-size: 18px;
+        }
+
+        .side_side {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .side_side>div {
+            flex-basis: 50%;
+            max-height: calc(100vh - 156px);
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scrollbar-color: #ccc transparent;
+            padding: 20px;
+
+        }
+
+        /* .question-number-side{
+            overflow-y:scroll;
+            scrollbar-color: #ccc transparent;
+        } */
+
+        /* start  scrool bar */
+        .question-number-side::-webkit-scrollbar,
+        .side_side>div::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .side_side>div:last-child {
+            border-left: 1px solid #ccc;
+        }
+
+        .question-number-side::-webkit-scrollbar,
+        .side_side>div:hover::-webkit-scrollbar {
+            display: block;
+        }
+
+        .question-number-side::-webkit-scrollbar-thumb,
+        .side_side>div:hover::-webkit-scrollbar-thumb {
+            background-color: #999;
+            border-radius: 2px;
+        }
+
+        .side_side>div:first-child {
+            resize: horizontal;
+        }
+
+        .side_side .explanation {
+            padding-top: 0 !important;
+        }
+
+        .side_side .explanation .answer-status {
+            margin-top: 0 !important;
+        }
+
+        .form-check-label {
+            opacity: 1 !important;
+        }
+
+        /*end scrool bar */
+    </style>
+</head>
+
+<body style="background: linear-gradient(180deg,#fcfcfc,#d7dced);">
+    <aside class="question-number-side">
+        <ul class="question-number list-group">
+            {% for i in total_question_list %}
+            <li class="list-group-item {% if i == current_page %} active {% endif %}" {% if i == current_page %}
+                aria-current="true" {% endif %}>
+                {% if i in correct_page %}
+                    {% if questions.0.test.tutor == True %}
+                        <i class="fa-solid fa-check text-success"></i>
+                    {% endif %}
+                {% elif i in incorrect_page %}
+                    {% if questions.0.test.tutor == True %}
+                        <i class="fa-solid fa-xmark text-danger"></i>
+                    {% endif %}
+                {% else %} 
+                <i class="fa-solid fa-circle"></i> 
+                {% endif %}
+                &nbsp; &nbsp;
+                <a href="?test_id={{test_id}}&page={{i}}"> {{i}} </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+    <main>
+        <section class="top-bar question-nav-top" style="font-size: 14px;">
+            <ul class="nav">
+                <li class="nav-item" style="padding: 0;">
+                    <a class="nav-link" aria-current="page" href="#"><i class="fa-solid fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-flex flex-column align-items-center" id="quetest">
+                    <span>Question {% if current_page is not None %} {{current_page}}{% else %} 1 {% endif %} of
+                        {{total_question}}</span>
+                    <span>Test ID: <span id="test_id">{{test_id}}</span> </span>
+                </li>
+                <li class="nav-item d-flex align-items-center gap-1">
+                    <label for="marked" class="d-flex align-items-center gap-1">
+                        <input type="checkbox" name="marked" id="marked">
+                        <i class="fa-solid fa-flag text-danger"></i>
+                        <span>Mark</span>
+                    </label>
+                </li>
+            </ul>
+            {% if questions.has_other_pages %}
+            <ul class="nav" id="prenex">
+                {% if questions.has_previous %}
+                <li class="nav-item">
+                    <a class="nav-link" href="?test_id={{test_id}}&page={{ questions.previous_page_number }}"
+                        aria-label="Previous">
+                        <i class="fa-solid fa-angles-left"></i>
+                        <span>Previous</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" onclick="NoQuestion()" aria-label="Next">
+                        <i class="fa-solid fa-angles-left"></i>
+                        <span>Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if questions.has_next %}
+                <li class="nav-item">
+                    <a class="nav-link" href="?test_id={{test_id}}&page={{ questions.next_page_number }}"
+                        aria-label="Next">
+                        <i class="fa-solid fa-angles-right"></i>
+                        <span>Next</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" onclick="submitTest()" aria-label="Next">
+                        <i class="fa-solid fa-angles-right"></i>
+                        <span>Next</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+            <ul class="nav">
+
+                <li class="nav-item d-flex flex-column align-items-center gap-1" id="screen_resize"
+                    onclick="openFullscreen()">
+                    <i class="fa-solid fa-expand"></i>
+                    <span>Full Screen</span>
+                </li>
+                <li class="d-none d-lg-flex nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Help</span>
+                </li>
+                <li class="d-none d-lg-flex nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-flask-vial"></i>
+                    <span>Lab</span>
+                </li>
+                <li class="d-none d-lg-flex nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span>Notes</span>
+                </li>
+                <li class="d-none d-md-flex nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>Calculator</span>
+                </li>
+                <li class="nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Setting</span>
+                </li>
+            </ul>
+        </section>
+        <div
+            class="main container-fluid {% if current_page in submitted_page %} {% if questions.0.test.tutor == True %} side_side {% endif %}  {% endif %}">
+            {% for question in questions %}
+            <div class="" style="width: 100%;">
+                <div class="card-body">
+                    <!-- <h5 class="card-title h3">Question Number {{current_page}}</h5> -->
+                    {% if question.question.image %}
+                    <div class="card align-content-center align-text-center my-2" style="max-width:400px">
+                        <img class="card-img-top img-thumbnail" src="{{question.question.image.url}}"
+                            alt="Question image" />
+                    </div>
+                    {% endif %}
+                    <p class="card-text">{{ question.question.questionText }}</p>
+                </div>
+                <ul class="answer-list list-group list-group-flush p-3">
+                    {% for ans in question.question.answer_set.all %}
+                    <div class="form-check py-2 col-12">
+                        <input {% if current_page in submitted_page %} {% if ans.answer == submitted_answer %} checked
+                            {% endif %} 
+                            {% if questions.0.test.tutor == True %}
+                                disabled
+                            {% endif %}
+                            {% endif %} class="form-check-input" type="radio"
+                            name="inlineRadioOptions" id="inlineRadio{{ forloop.counter }}" value="{{ ans.id }}">
+                        <label
+                            class="form-check-label
+                            {% if questions.0.test.tutor == True %}
+                            {% if current_page in submitted_page %} {% if ans.answer == correct_answer %} text-success {% else %} 
+                            {% if ans.answer == submitted_answer %} text-danger {% endif %} {% endif %} {% endif %} {% endif %}"
+                            for="inlineRadio{{ forloop.counter }}">
+                            {% if forloop.counter == 1 %} A) {% elif forloop.counter == 2 %} B)
+                            {% elif forloop.counter == 3 %} C) {% elif forloop.counter == 4 %} D)
+                            {% elif forloop.counter == 5 %} E) {% elif forloop.counter == 6 %} F) 
+                            {% endif %}
+                            {{ ans }}
+                            {% if questions.0.test.tutor == True %}
+                                {% if current_page in submitted_page %} 
+                                    {% if ans.answer == correct_answer %} 
+                                        <i class="fa-solid fa-check text-success"></i> 
+                                    {% else %}
+                                        {% if ans.answer == submitted_answer %} 
+                                            <i class="fa-solid fa-xmark text-danger"></i>
+                                        {% endif %} 
+                                    {% endif %} 
+                                {% endif %}
+                                {% if current_page in submitted_page %}
+                                ({% if forloop.counter == 1 %} {{answerPercentageList.0}} {% elif forloop.counter == 2 %}
+                                {{answerPercentageList.1}} {% elif forloop.counter == 3 %} {{answerPercentageList.2}}
+                                {% elif forloop.counter == 4 %} {{answerPercentageList.3}} {% elif forloop.counter == 5 %}
+                                {{answerPercentageList.4}} {% elif forloop.counter == 6 %} {{answerPercentageList.5}}
+                                {% endif %}%)
+                                {% endif %}
+                            {% endif %}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </ul>
+                {% if current_page in submitted_page %}
+                {% if questions.0.test.tutor == True %}
+                <div
+                    class="answer-status {% if questionTest.is_correct == False %} wrong-answer{% else %} correct-answer {% endif %}">
+                    <div class="status">
+                        {% if questionTest.is_correct == False %}
+                        <span class="wrong">Incorrect</span>
+                        <span class="text-p">Correct Answer</span>
+                        <span class="correct-answer">{{ correct_answer }}</span>
+                        {% else %}
+                        <span class="correct">Correct</span>
+                        {% endif %}
+                    </div>
+                    <div class="stat">
+                        <i class="fa-solid fa-chart-column"></i>
+                        <div>
+                            <span class="correct-percent">{{correct_answered}}%</span>
+                            <span class="text-p">Answered Correctely</span>
+                        </div>
+                    </div>
+                    <div class="time-spent">
+                        <i class="fa-regular fa-clock"></i>
+                        <div>
+                            <span>{{questionTest.time_taken}} Sec</span>
+                            <span class="text-p">Time Spent</span>
+                        </div>
+                    </div>
+                    <div class="version">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        <div>
+                            <span>2022</span>
+                            <span class="text-p">Version</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="explanation container-fluid">
+                {% if current_page in submitted_page %}
+                    {% if questions.0.test.tutor == True %}
+                        <div class="">
+                            <div class="card-body">
+                                <h5 class="card-title">Explanation</h5>
+                                {% if submitQuestion.explaination_image %}
+                                <div class="card align-content-center align-text-center" style="max-width:400px">
+                                    <img class="card-img-top img-thumbnail" src="{{submitQuestion.explaination_image.url}}"
+                                        alt="Question image" />
+                                </div>
+                                {% endif %}
+                                <p class="card-text">{{ submitQuestion.explainationText }}</p>
+                            </div>
+                            <ul class="list-group list-group-flush p-3 pe-none">
+                                {% if submitQuestion.subject is not None %}
+                                <div class="mb-2">
+                                    <span>{{ submitQuestion.subject }}</span>
+                                    <span class="text-p">Subject</span>
+                                </div>
+                                {% endif %}
+                                {% if submitQuestion.system is not None %}
+                                <div class="mb-2">
+                                    <span>{{ submitQuestion.system }}</span>
+                                    <span class="text-p">System</span>
+                                </div>
+                                {% endif %}
+                                {% if submitQuestion.topic is not None %}
+                                <div class="mb-2">
+                                    <span>{{ submitQuestion.topic }}</span>
+                                    <span class="text-p">Topic</span>
+                                </div>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a  {% if questions.has_next %} onclick="CheckAnswer({{ questions.0.question.id }})" 
+                        href="?test_id={{test_id}}&page={{ questions.next_page_number }}"
+                        aria-label="Next" {% else %}
+                        onclick="CheckLastAnswer({{ questions.0.question.id }})" {% endif %}
+                        class="btn btn-primary d-none" id="after_select">Submit</a>
+                        <a {% if questions.has_next %} onclick="CheckAnswer({{ questions.0.question.id }})" {% else %}
+                        onclick="CheckLastAnswer({{ questions.0.question.id }})" {% endif %}
+                        class="btn btn-primary" id="before_select">Submit</a>
+                    {% endif %}
+                {% else %}
+                    {% if questions.0.test.tutor == True %}
+                        <a onclick="QuestionExplanationButton({{ questions.0.question.id }})" class="btn btn-primary">Submit</a>
+                    {% else %}
+                        <a  {% if questions.has_next %} onclick="CheckAnswer({{ questions.0.question.id }})" 
+                            href="?test_id={{test_id}}&page={{ questions.next_page_number }}"
+                            aria-label="Next" {% else %}
+                            onclick="CheckLastAnswer({{ questions.0.question.id }})" {% endif %}
+                            class="btn btn-primary d-none" id="after_select">Submit</a>
+                        <a {% if questions.has_next %} onclick="CheckAnswer({{ questions.0.question.id }})" {% else %}
+                            onclick="CheckLastAnswer({{ questions.0.question.id }})" {% endif %}
+                            class="btn btn-primary" id="before_select">Submit</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <section class="bottom-bar question-nav-bottom" style="font-size: 14px;">
+            <ul class="nav">
+                <li class="nav-item d-flex flex-column">
+                    <span>Time {% if questions.0.test.timed == True %}Remaining{% endif %}: <span
+                            id="time_min">00</span>:<span id="time_sec">00</span></span>
+                    <span> {% if questions.0.test.tutor == True %}Tutor{% endif %}
+                        {% if questions.0.test.timed == True %}Timed{% endif %}</span>
+                </li>
+            </ul>
+            <ul class="nav" style="align-items: center;">
+                <li class="nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-book"></i>
+                    <span>My Notes</span>
+                </li>
+                <li class="nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-message"></i>
+                    <span>Feedback</span>
+                </li>
+                <li onclick="suspendTest()" class="nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-circle-pause"></i>
+                    <span>Suspend</span>
+                </li>
+                <li onclick="endTest()" class="nav-item d-flex flex-column align-items-center gap-1">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    <span>End Block</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Submit Button Modal -->
+        <div class="modal fade " id="submit-button-modal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="submit-button-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="submit-button-modalLabel">Test ID: {{ test_id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to submit the test?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form action="" method="post" style="margin: 0 10px 0 0;"
+                            class="d-flex align-center justify-center">
+                            {% csrf_token %}
+                            <input type="hidden" name="test_id" value="{{ test_id }}">
+                            <button type="submit" class="btn btn-primary">Submit Test</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Answer without answer Modal -->
+        <div class="modal fade " id="submit-question-wa-modal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="submit-button-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="submit-button-modalLabel">Omit Question?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        You have not answered this question.
+                        <br>
+                        Do you wish to continue without answering?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        {% if questions.0.test.tutor == True %}
+                        <a onclick="QuestionExplanation({{ questions.0.question.id }})" class="btn btn-primary">Get
+                            Explanation</a>
+                        {% else %}
+                        <a {% if questions.has_next %} href="?test_id={{test_id}}&page={{ questions.next_page_number }}"
+                            aria-label="Next" {% else %} onclick="submitTest()" {% endif %}
+                            class="btn btn-primary">Continue</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Button Modal -->
+        <div class="modal fade " id="end-button-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="end-button-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="end-button-modalLabel">Test ID: {{ test_id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to end the test?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form action="" method="post" style="margin: 0 10px 0 0;"
+                            class="d-flex align-center justify-center">
+                            {% csrf_token %}
+                            <input type="hidden" name="test_id" value="{{ test_id }}">
+                            <button type="submit" class="btn btn-primary">End Test</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- No Question Modal -->
+        <div class="modal fade " id="noquestion-button-modal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="end-button-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="end-button-modalLabel">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        You are already at the first question of the block.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suspend Button Modal -->
+        <div class="modal fade " id="suspend-button-modal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="suspend-button-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="suspend-button-modalLabel">Test ID: {{ test_id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to suspend the test?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form action="" method="post" style="margin: 0 10px 0 0;"
+                            class="d-flex align-center justify-center">
+                            {% csrf_token %}
+                            <input type="hidden" name="test_id" value="{{ test_id }}">
+                            <button type="submit" class="btn btn-primary">Suspend Test</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+        $('input[name="inlineRadioOptions"]').click(function (){
+            // console.log("Helloooooooo");
+            $('#before_select').addClass('d-none');
+            $('#after_select').removeClass('d-none');
+            });
+        // $('#submit-button-modal').modal({ show: false})
+        function submitTest() {
+            try {
+                $('#submit-question-wa-modal').modal('hide')
+            }
+            catch (err) {
+                // console.log(err)
+            }
+            $('#submit-button-modal').modal('show')
+        }
+        function suspendTest() {
+            $('#suspend-button-modal').modal('show')
+        }
+        function endTest() {
+            $('#end-button-modal').modal('show')
+        }
+        function NoQuestion() {
+            $('#noquestion-button-modal').modal('show')
+        }
+        function NoAnswer() {
+            $('#submit-question-wa-modal').modal('show')
+        }
+
+        $('input[name="inlineRadioOptions"]').on('click', function () {
+            // console.log($(this).val());
+        });
+
+        var elem = document.documentElement;
+        function openFullscreen() {
+            try {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) { /* Safari */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE11 */
+                    elem.msRequestFullscreen();
+                }
+                $('#screen_resize span').text('Exit Mode');
+                $('#screen_resize i').removeClass('fa-expand');
+                $('#screen_resize i').addClass('fa-compress');
+                $('#screen_resize').attr('onclick', 'closeFullscreen()');
+            }
+            catch (err) {
+                closeFullscreen()
+            }
+        }
+
+        function closeFullscreen() {
+            try {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+                $('#screen_resize span').text('Full Screen');
+                $('#screen_resize i').removeClass('fa-compress');
+                $('#screen_resize i').addClass('fa-expand');
+                $('#screen_resize').attr('onclick', 'openFullscreen()');
+            }
+            catch (err) {
+                openFullscreen()
+            }
+        }
+
+        var start_time = Math.round(Date.now());
+        var time_min = 0;
+        var time_sec = 0;
+        var timer = true
+
+        {% if current_page in submitted_page %}
+            {% if questions.0.test.timed == True %}
+                timer = false
+            {% else %}
+                timer = true
+            {% endif %}
+        {% endif %}
+
+        {% if questions.0.test.timed == True %} settime({{ remaining_time }}); {% else %} zerotime(); {% endif %}
+        function zerotime() {
+            time_sec = time_sec + 1
+            if (time_sec == 60) {
+                time_sec = 0
+                time_min = time_min + 1
+            }
+            if (time_min < 10) {
+                timemin = '0' + time_min.toString()
+            }
+            else {
+                timemin = time_min.toString()
+            }
+            if (time_sec < 10) {
+                timesec = '0' + time_sec.toString()
+            }
+            else {
+                timesec = time_sec.toString()
+            }
+            document.getElementById("time_min").innerHTML = timemin;
+            document.getElementById("time_sec").innerHTML = timesec;
+            if (timer == true) {
+                setTimeout(zerotime, 1000);
+            }
+        }
+        var count_sec = 0;
+        function settime(time_in_second) {
+            if (time_in_second > 0) {
+                time_sec = time_in_second % 60
+                time_min = (time_in_second - time_sec) / 60
+                if (time_min < 10) {
+                    timemin = '0' + time_min.toString()
+                }
+                else {
+                    timemin = time_min.toString()
+                }
+                if (time_sec < 10) {
+                    timesec = '0' + time_sec.toString()
+                }
+                else {
+                    timesec = time_sec.toString()
+                }
+                document.getElementById("time_min").innerHTML = timemin;
+                document.getElementById("time_sec").innerHTML = timesec;
+
+                time_in_second = time_in_second - 1
+                if (timer == true) {
+                    setTimeout(settime, 1000, time_in_second);
+                }
+
+            }
+        }
+
+        function QuestionExplanationButton(question_id) {
+            try {
+                var answer = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+                QuestionExplanation(question_id);
+            } catch (err) {
+                var answer = 0;
+                NoAnswer();
+            }
+        }
+
+        function QuestionExplanation(question_id) {
+            try {
+                $('#submit-question-wa-modal').modal('hide')
+            }
+            catch (err) {
+                // console.log(err)
+            }
+            // CheckAnswer(question_id);
+            var end_time = Math.round(Date.now());
+            var time_taken = end_time - start_time;
+            time_taken = time_taken / 1000;
+            time_taken = time_taken.toFixed();
+            timer = false;
+            var question_id = question_id;
+            try {
+                var answer = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+            } catch (err) {
+                var answer = 0;
+            }
+            if ($('#marked').is(':checked')) {
+                var marked = true;
+            } else {
+                var marked = false;
+            }
+            var test_id = document.getElementById('test_id').innerText;
+            // console.log("Question ID: " + question_id);
+            // console.log("Answer: " + answer);
+            // console.log("Marked: " + marked);
+            $.ajax({
+                url: '/question',
+                type: 'GET',
+                beforeSend: function (request) {
+                    request.setRequestHeader("AjaxRequest", 'GetExplanation');
+                },
+                data: {
+                    'question_id': question_id,
+                    'answer': answer,
+                    'marked': marked,
+                    'test_id': test_id,
+                    'time_taken': time_taken
+                },
+                success: function (data) {
+                    // Disable the radio buttons having name "inlineRadioOptions"
+                    $('input[name="inlineRadioOptions"]').attr('disabled', true);
+                    $('.main').addClass('side_side');
+                    $('.main').html(data);
+                },
+                error: function (error) {
+                    // console.log(error);
+                }
+            })
+        }
+        
+        function CheckAnswer(question_id) {
+            var end_time = Math.round(Date.now());
+            var time_taken = end_time - start_time;
+            time_taken = time_taken / 1000;
+            time_taken = time_taken.toFixed();
+            var question_id = question_id;
+            try {
+                var answer = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+                if ($('#marked').is(':checked')) {
+                    var marked = true;
+                } else {
+                    var marked = false;
+                }
+                var test_id = document.getElementById('test_id').innerText;
+                console.log("Succesfully Submitted question " + question_id + " with answer " + answer + " and time " + time_taken + " seconds");
+                // console.log("Question ID: " + question_id);
+                // console.log("Answer: " + answer);
+                // console.log("Marked: " + marked);
+                $.ajax({
+                    url: '/question',
+                    type: 'GET',
+                    beforeSend: function (request) {
+                        request.setRequestHeader("AjaxRequest", 'CheckAnswer');
+                    },
+                    data: {
+                        'question_id': question_id,
+                        'answer': answer,
+                        'marked': marked,
+                        'test_id': test_id,
+                        'time_taken': time_taken
+                    },
+                    success: function (data) {
+                        // Disable the radio buttons having name "inlineRadioOptions"
+                        // console.log(data.is_correct);
+                        if (question_id == 0) {
+                            submitTest();
+                        }
+                    },
+                    error: function (error) {
+                        // console.log(error);
+                    }
+                })
+            
+            } catch (err) {
+                var answer = 0;
+                NoAnswer();
+            }
+            // console.log("Answer: " + answer);
+        }
+        function SubmitTest(test_id) {
+            var test_id = test_id;
+            $.ajax({
+                url: '/question',
+                type: 'GET',
+                beforeSend: function (request) {
+                    request.setRequestHeader("AjaxRequest", 'SubmitTest');
+                },
+                data: {
+                    'test_id': test_id
+                },
+                success: function (data) {
+                    // Disable the radio buttons having name "inlineRadioOptions"
+                    // console.log(data);
+                },
+                error: function (error) {
+                    // console.log(error);
+                }
+            });
+        }
+        function CheckLastAnswer(question_id) {
+            CheckAnswer(question_id);
+            try {
+                var answer = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+                submitTest();
+            } catch (err) {
+                var answer = 0;
+            }
+            // console.log("Answer: " + answer);
+        }
+    </script>
+
+
+</body>
+
+</html>
