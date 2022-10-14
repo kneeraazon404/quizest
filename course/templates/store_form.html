@@ -1,0 +1,16 @@
+{% extends "base/layout.html" %} {% load static %} {% block body %}
+{% load crispy_forms_tags %}
+<div class="container">
+  <form method="POST" enctype="multipart/form-data">
+    <!-- Security token -->
+    {% csrf_token %}
+
+    <!-- Using the formset -->
+    {{ form|crispy }}
+    <div class="my-2">
+
+      <input class="btn btn-primary text-white p-2 w-15" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>
+{% endblock body %}

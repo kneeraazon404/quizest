@@ -1,8 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from allauth.account.forms import LoginForm, SignupForm
-from django.contrib.auth.models import User
+from allauth.account.forms import LoginForm
 from django import forms
+from course.models import Store
 
 
 class Loginform(LoginForm):
@@ -30,3 +29,53 @@ class Loginform(LoginForm):
                 }
             ),
         )
+
+
+# creating a form
+class StoreForm(forms.ModelForm):
+
+    # create meta class
+    class Meta:
+        # specify model to be used
+        model = Store
+
+        # specify fields to be used
+        fields = [
+            "name",
+            "uploaded_file",
+        ]
+
+
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from course.models import Profile
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField()
+    full_name = forms.CharField(max_length=100)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1", "password2"]
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email",
+        ]
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            "full_name",
+            "image",
+        ]

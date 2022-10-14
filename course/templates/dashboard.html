@@ -1,0 +1,118 @@
+{% extends "base/layout.html" %} {% load static %} {% block body %}
+
+<div class="container">
+  {% if request.user.is_superuser %}
+  <br />
+  <a class="btn btn-primary px-2 py-2 w-15 m-2 text-white" href="{% url 'register' %}"
+    style="text-decoration: none; color: white">
+    Add New User</a>
+  <br />
+  <table class="table table-bordered">
+
+    <thead class="display-4">
+      <tr>
+        <th scope="col"><strong>#UID</strong></th>
+        <th scope="col">Date Created</th>
+        <th scope="col">Full Name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <th scope="row">{{user.id}}</th>
+        <th>{{user.date_joined}}</th>
+        <td>{{user.profile.full_name}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>
+          <a class="btn btn-primary px-2 py-1" href="{% url 'account_signup' %}"
+            style="text-decoration: none; color: white">
+            Update</a>
+        </td>
+        <td>
+          <a class="btn btn-danger px-2 py-1" href="{% url 'account_signup' %}"
+            style="text-decoration: none; color: white">
+            Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+
+{% endif %}
+<br />
+<div class="container">
+  <a class="btn btn-primary px-2 py-2 m-2 w-15" href="{% url 'store-create' %}"
+    style="text-decoration: none; color: white">
+    Add New File</a>
+  <br />
+
+  <table class="table table-bordered">
+
+    <thead class="display-4">
+      <tr>
+        <th scope="col"><strong>#SID</strong></th>
+        <th scope="col">Date Created</th>
+        <th scope="col">User/Uploader</th>
+        <th scope="col">Store Name</th>
+        <th scope="col">Uploaded File</th>
+        <th scope="col">Converted File</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for store in stores %}
+      <tr>
+        <th scope="row">{{store.id}}</th>
+        <th>{{store.created_at}}</th>
+        <td>{{request.user.profile.full_name}}</td>
+        <td>{{store.name}}</td>
+        <td>{{store.uploaded_file}}</td>
+        <td>{{store.converted_file}}</td>
+        <td>
+          <a class="btn btn-primary px-2 py-1" href="{% url 'store-update' store.id %}"
+            style="text-decoration: none; color: white">
+            Update</a>
+        </td>
+        <td>
+          <a class="btn btn-danger px-2 py-1" href="{% url 'store-delete' store.id %}"
+            style="text-decoration: none; color: white">
+            Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if is_paginated %}
+
+  {% if page_obj.has_previous %}
+
+  <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+  <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+  {% if page_obj.number == num %}
+  <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+  {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+  <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+  {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+  <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+  <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+  {% endif %}
+
+  {% endif %}
+
+</div>
+
+{% endblock body %}

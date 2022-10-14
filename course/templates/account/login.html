@@ -1,118 +1,28 @@
-{% extends "base/layout.html" %}
-{% load static %}
-{% block title %}Login{% endblock %}
+{% extends "base/layout.html" %}{% load crispy_forms_tags %} {% load static %}
 {% block body %}
-{% load i18n %}
-{% load account socialaccount %}
-
-
-{% get_providers as socialaccount_providers %}
-
-<!-- {% if socialaccount_providers %}
-
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
-
-{% include "socialaccount/snippets/login_extra.html" %}
-
-{% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-{% endif %} -->
-{% block head %}
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-
-<style>
-    section.main{
-        min-height: calc(100vh - 98px);
-    }
-</style>
-{% endblock %}
-
-<section class="main">
-    <div class="container d-flex flex-column">
-        <div class="row align-items-center justify-content-center mt-5">
-            <div class="col-md-6 col-lg-5 col-xl-4 py-6 py-md-0">
-
-                <div>
-                    <div class="mb-5 text-center">
-                        <h6 class="h3 mb-1">Login</h6>
-                        <p class="text-muted mb-0">Sign in to your account to continue.</p>
-                    </div>
-                    {% if form.non_field_errors %}
-                    {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">{{ error }}</div>
-
-                    {% endfor %}
-                    {% endif %}
-                    <span class="clearfix"></span>
-                    <form method="POST" action="{% url 'account_login' %}">
-                        {% csrf_token %}
-                        {% if redirect_field_value %}
-                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                        {% endif %}
-                        <div class="form-group">
-                            <label class="form-control-label">Username</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend" style="height: 100%;">
-                                    <span class="input-group-text" style="height: 50px;border-radius: 0.375rem 0 0 0.375rem;">
-                                        <i class="fa-solid fa-user"></i>
-                                    </span>
-                                </div>
-                                {{ form.login }}
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-0">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <label class="form-control-label">Password</label>
-                                </div>
-                                <div class="mb-2">
-                                    <a href="#" class="small text-muted text-underline--dashed border-primary"
-                                        data-toggle="password-text" data-target="#input-password">Show password</a>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend" style="height: 100%;">
-                                    <span class="input-group-text" style="height: 50px;border-radius: 0.375rem 0 0 0.375rem;">
-                                        <i class="fa-solid fa-key"></i>
-                                    </span>
-                                </div>
-                                {{ form.password }}
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-block btn-primary">Sign in</button>
-                        </div>
-                    </form>
-                    <!--
-                    <div class="py-3 text-center">
-                        <span class="text-xs text-uppercase">or</span>
-                    </div>-->
-                    <!-- Alternative login -->
-                    <!-- <div class="row">
-                        <div class="col-sm-12">
-                            <a href="#" class="btn btn-block btn-neutral btn-icon">
-                                <span class="btn-inner--icon"><img
-                                        src="{% static 'assets/img/icons/brands/google.svg' %}"
-                                        alt="Image placeholder"></span>
-                                <span class="btn-inner--text">Google</span>
-                            </a>
-                        </div>
-                    </div> -->
-                    <!-- Links -->
-                    <div class="mt-3">
-                        <a class="button secondaryAction pt-3"
-                            href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-                    </div>
-                    <div class="mt-4 text-center"><small>Not registered?</small>
-                        <a href="{{ signup_url }}" class="small font-weight-bold">Create account</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="container">
+  <div class="content-section m-4">
+    <form method="POST">
+      {% csrf_token %}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Log In</legend>
+        {{ form | crispy }}
+      </fieldset>
+      <div class="form-group">
+        <button class="btn btn-primary text-white p-2 w-15" type="submit">
+          Login
+        </button>
+        <small class="text-muted ml-2">
+          <a href="{% url 'password_reset'%}">Forgot Password</a>
+        </small>
+      </div>
+    </form>
+    <div class="border-top pt-3">
+      <small class="">
+        Need An Account?
+        <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+      </small>
     </div>
-</section>
+  </div>
+</div>
 {% endblock %}
